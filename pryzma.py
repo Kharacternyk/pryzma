@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from cached_property import cached_property
+from math import sqrt
 
 
 class Color:
@@ -31,3 +32,10 @@ class Color:
         if contrast < 1:
             return 1 / contrast
         return contrast
+
+    def compute_difference(self, color):
+        redmean = (self.r + color.r) / 2
+        weighted_dr = (self.r - color.r) ** 2 * (2 + redmean)
+        weighted_dg = (self.g - color.g) ** 2 * 4
+        weighted_db = (self.b - color.b) ** 2 * (3 - redmean)
+        return sqrt(weighted_dr + weighted_dg + weighted_db) / 3
