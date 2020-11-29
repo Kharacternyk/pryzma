@@ -2,6 +2,7 @@
 
 from cached_property import cached_property
 from math import sqrt, nan
+from PIL import Image
 
 
 class Color:
@@ -29,6 +30,7 @@ class Color:
             if angle < 0:
                 return angle + 360
             return angle
+
         maxchannel = max(self.rgb)
         minchannel = min(self.rgb)
         if maxchannel == minchannel:
@@ -66,10 +68,28 @@ class Color:
         weighted_db = (self.b - color.b) ** 2 * (3 - redmean)
         return sqrt(weighted_dr + weighted_dg + weighted_db) / 3
 
-def classify(color):
-    if round(color.hue) in range(31, 90): return "yellow"
-    if round(color.hue) in range(91, 150): return "green"
-    if round(color.hue) in range(151, 210): return "cyan"
-    if round(color.hue) in range(211, 270): return "blue"
-    if round(color.hue) in range(271, 330): return "magenta"
-    return "red"
+
+def generate_palette(image_path):
+    pixels = (
+        Color(r / 255, g / 255, b / 255)
+        for (r, g, b) in Image.open(image_path).getdata()
+    )
+    huemap = {
+        hue: list() for hue in ("red", "yellow", "green", "cyan", "blue", "magenta")
+    }
+    for color in pixels:
+        if color.hue is nan:
+            continue
+        elif round(color.hue) in range(31, 90):
+            huemap["yellow"].append(color)
+        elif round(color.hue) in range(91, 150):
+            huemap["green"].append(color)
+        elif round(color.hue) in range(151, 210):
+            huemap["cyan"].append(color)
+        elif round(color.hue) in range(211, 270):
+            huemap["blue"].append(color)
+        elif round(color.hue) in range(271, 330):
+            huemap["magenta"].append(color)
+        else:
+            huemap["red"].append(color)
+    return huemap
