@@ -14,6 +14,12 @@ class Color:
     g = property(lambda self: self.__g)
     b = property(lambda self: self.__b)
 
+    def __str__(self):
+        switchred = f"\x1b[38;2;{round(self.r*255)};{round(self.g*255)};{round(self.b*255)}m"
+        blocks = "███"
+        switchnull = "\x1b[0m"
+        return switchred + blocks + switchnull
+
     @cached_property
     def relative_luminance(self):
         def normalize(c):
