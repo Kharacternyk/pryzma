@@ -6,9 +6,9 @@ from math import sqrt
 
 class Color:
     def __init__(self, r, g, b):
-        self.__r = r / 255
-        self.__g = g / 255
-        self.__b = b / 255
+        self.__r = r
+        self.__g = g
+        self.__b = b
 
     r = property(lambda self: self.__r)
     g = property(lambda self: self.__g)
