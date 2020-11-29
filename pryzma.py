@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from cached_property import cached_property
-from math import sqrt
+from math import sqrt, nan
 
 
 class Color:
@@ -13,12 +13,32 @@ class Color:
     r = property(lambda self: self.__r)
     g = property(lambda self: self.__g)
     b = property(lambda self: self.__b)
+    rgb = property(lambda self: [self.r, self.g, self.b])
 
     def __str__(self):
-        switchred = f"\x1b[38;2;{round(self.r*255)};{round(self.g*255)};{round(self.b*255)}m"
+        switchred = (
+            f"\x1b[38;2;{round(self.r*255)};{round(self.g*255)};{round(self.b*255)}m"
+        )
         blocks = "███"
         switchnull = "\x1b[0m"
         return switchred + blocks + switchnull
+
+    @cached_property
+    def hue(self):
+        def normalize(angle):
+            if angle < 0:
+                return angle + 360
+            return angle
+        maxchannel = max(self.rgb)
+        minchannel = min(self.rgb)
+        if maxchannel == minchannel:
+            return nan
+        if self.r == maxchannel:
+            return normalize((self.g - self.b) / (maxchannel - minchannel) * 60)
+        if self.g == maxchannel:
+            return normalize((2.0 + (self.b - self.r) / (maxchannel - minchannel)) * 60)
+        if self.b == maxchannel:
+            return normalize((4.0 + (self.r - self.g) / (maxchannel - minchannel)) * 60)
 
     @cached_property
     def relative_luminance(self):
@@ -45,3 +65,11 @@ class Color:
         weighted_dg = (self.g - color.g) ** 2 * 4
         weighted_db = (self.b - color.b) ** 2 * (3 - redmean)
         return sqrt(weighted_dr + weighted_dg + weighted_db) / 3
+
+def classify(color):
+    if round(color.hue) in range(31, 90): return "yellow"
+    if round(color.hue) in range(91, 150): return "green"
+    if round(color.hue) in range(151, 210): return "cyan"
+    if round(color.hue) in range(211, 270): return "blue"
+    if round(color.hue) in range(271, 330): return "magenta"
+    return "red"
