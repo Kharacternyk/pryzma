@@ -1,10 +1,8 @@
-debug: black flake shell
-
-shell:
-	@python -i pryzma.py
+debug: black flake
+	@python -q
 
 black:
-	@black pryzma.py 2>&1 | tail -n1
+	@black pryzma/* 2>&1 | tail -n1
 
 flake:
-	@flake8 pryzma.py
+	@flake8 pryzma/*
