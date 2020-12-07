@@ -1,95 +1,87 @@
 #!/usr/bin/env python
 
-from cached_property import cached_property
-from math import sqrt, nan
+from math import nan, floor, ceil
 from PIL import Image
+from random import random
 
 
-class Color:
-    def __init__(self, r, g, b):
-        self.__r = r
-        self.__g = g
-        self.__b = b
+def pprint(r, g, b):
+    switchred = f"\x1b[38;2;{round(r*255)};{round(g*255)};{round(b*255)}m"
+    blocks = "███"
+    switchnull = "\x1b[0m"
+    print(switchred + blocks + switchnull, end="")
 
-    r = property(lambda self: self.__r)
-    g = property(lambda self: self.__g)
-    b = property(lambda self: self.__b)
-    rgb = property(lambda self: [self.r, self.g, self.b])
 
-    def __str__(self):
-        switchred = (
-            f"\x1b[38;2;{round(self.r*255)};{round(self.g*255)};{round(self.b*255)}m"
-        )
-        blocks = "███"
-        switchnull = "\x1b[0m"
-        return switchred + blocks + switchnull
+def saturation(r, g, b):
+    maxchannel = max((r, g, b))
+    minchannel = min((r, g, b))
+    luminance = (maxchannel + minchannel) / 2
+    # FIXME
+    if maxchannel + minchannel in (0, 2):
+        return 0
+    if luminance > 0.5:
+        return (maxchannel - minchannel) / (2 - maxchannel - minchannel)
+    return (maxchannel - minchannel) / (maxchannel + minchannel)
 
-    @cached_property
-    def hue(self):
-        def normalize(angle):
-            if angle < 0:
-                return angle + 360
-            return angle
 
-        maxchannel = max(self.rgb)
-        minchannel = min(self.rgb)
-        if maxchannel == minchannel:
-            return nan
-        if self.r == maxchannel:
-            return normalize((self.g - self.b) / (maxchannel - minchannel) * 60)
-        if self.g == maxchannel:
-            return normalize((2.0 + (self.b - self.r) / (maxchannel - minchannel)) * 60)
-        if self.b == maxchannel:
-            return normalize((4.0 + (self.r - self.g) / (maxchannel - minchannel)) * 60)
+def hue(r, g, b):
+    def normalize(angle):
+        if angle < 0:
+            return angle + 360
+        return angle
 
-    @cached_property
-    def relative_luminance(self):
-        def normalize(c):
-            if c <= 0.03928:
-                return c / 12.92
-            return ((c + 0.055) / 1.055) ** 2.4
+    maxchannel = max((r, g, b))
+    minchannel = min((r, g, b))
+    if maxchannel == minchannel:
+        return nan
+    if r == maxchannel:
+        return normalize((g - b) / (maxchannel - minchannel) * 60)
+    if g == maxchannel:
+        return normalize((2.0 + (b - r) / (maxchannel - minchannel)) * 60)
+    if b == maxchannel:
+        return normalize((4.0 + (r - g) / (maxchannel - minchannel)) * 60)
 
-        return (
-            normalize(self.r) * 0.2126
-            + normalize(self.g) * 0.7152
-            + normalize(self.b) * 0.0722
-        )
 
-    def compute_contrast(self, color):
-        contrast = (self.relative_luminance + 0.05) / (color.relative_luminance + 0.05)
-        if contrast < 1:
-            return 1 / contrast
-        return contrast
+def relative_luminance(r, g, b):
+    def normalize(c):
+        if c <= 0.03928:
+            return c / 12.92
+        return ((c + 0.055) / 1.055) ** 2.4
 
-    def compute_difference(self, color):
-        redmean = (self.r + color.r) / 2
-        weighted_dr = (self.r - color.r) ** 2 * (2 + redmean)
-        weighted_dg = (self.g - color.g) ** 2 * 4
-        weighted_db = (self.b - color.b) ** 2 * (3 - redmean)
-        return sqrt(weighted_dr + weighted_dg + weighted_db) / 3
+    return normalize(r) * 0.2126 + normalize(g) * 0.7152 + normalize(b) * 0.0722
+
+
+def contrast(r1, g1, b1, r2, g2, b2):
+    contrast = (relative_luminance(r1, g1, b1) + 0.05) / (
+        relative_luminance(r2, g2, b2) + 0.05
+    )
+    if contrast < 1:
+        return 1 / contrast
+    return contrast
 
 
 def generate_palette(image_path):
     pixels = (
-        Color(r / 255, g / 255, b / 255)
-        for (r, g, b) in Image.open(image_path).getdata()
+        (r / 255, g / 255, b / 255) for (r, g, b) in Image.open(image_path).getdata()
     )
-    huemap = {
-        hue: list() for hue in ("red", "yellow", "green", "cyan", "blue", "magenta")
-    }
-    for color in pixels:
-        if color.hue is nan:
+    huemap = {i: [[0, 0, 0], 0] for i in range(6)}
+    for (r, g, b) in pixels:
+        if random() < 0.9 or saturation(r, g, b) < 0.3:
             continue
-        elif round(color.hue) in range(31, 90):
-            huemap["yellow"].append(color)
-        elif round(color.hue) in range(91, 150):
-            huemap["green"].append(color)
-        elif round(color.hue) in range(151, 210):
-            huemap["cyan"].append(color)
-        elif round(color.hue) in range(211, 270):
-            huemap["blue"].append(color)
-        elif round(color.hue) in range(271, 330):
-            huemap["magenta"].append(color)
-        else:
-            huemap["red"].append(color)
+
+        neighbour1 = floor(hue(r, g, b) / 60)
+        neighbour2 = ceil(hue(r, g, b) / 60)
+        weight1 = 1 - (hue(r, g, b) / 60 - neighbour1)
+        weight2 = 1 - weight1
+        if neighbour2 == 6:
+            neighbour2 = 0
+
+        huemap[neighbour1][1] += weight1
+        huemap[neighbour2][1] += weight2
+        for i in range(3):
+            huemap[neighbour1][0][i] += (r, g, b)[i] * weight1
+        for i in range(3):
+            huemap[neighbour2][0][i] += (r, g, b)[i] * weight2
+
+        print(huemap)
     return huemap
