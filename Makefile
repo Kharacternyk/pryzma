@@ -1,8 +1,12 @@
-debug: black flake
+debug: black flake pytest
 	@python -q
 
 black:
-	@black pryzma/* 2>&1 | tail -n1
+	@black pryzma/* tests/* 2>&1 | tail -n1
 
 flake:
-	@flake8 pryzma/*
+	@flake8 pryzma/* tests/*
+
+pytest: export PYTHONPATH = ../pryzma
+pytest:
+	@pytest -qq tests
