@@ -12,6 +12,11 @@ def test_saturation_within_0_1(r, g, b):
     assert s >= 0 and s <= 1
 
 
+@given(channel)
+def test_grayscale_saturation_is_0(c):
+    assert saturation(c, c, c) == 0
+
+
 @given(channel, channel, channel)
 def test_hue_within_0_360_or_nan(r, g, b):
     h = hue(r, g, b)
