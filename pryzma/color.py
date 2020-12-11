@@ -1,13 +1,11 @@
-#!/usr/bin/env python
-
 from math import nan
 
 
 def pprint(r, g, b):
-    switchred = f"\x1b[38;2;{round(r*255)};{round(g*255)};{round(b*255)}m"
+    switchfg = f"\x1b[38;2;{round(r*255)};{round(g*255)};{round(b*255)}m"
     blocks = "███"
     switchnull = "\x1b[0m"
-    print(switchred + blocks + switchnull, end="")
+    print(switchfg + blocks + switchnull, end="")
 
 
 def saturation(r, g, b):
