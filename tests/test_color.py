@@ -1,26 +1,8 @@
 from hypothesis import given
 from hypothesis.strategies import floats
-from math import nan
-from pryzma.color import saturation, hue, relative_luminance
+from pryzma.color import relative_luminance
 
 channel = floats(min_value=0, max_value=1)
-
-
-@given(channel, channel, channel)
-def test_saturation_within_0_1(r, g, b):
-    s = saturation(r, g, b)
-    assert s >= 0 and s <= 1
-
-
-@given(channel)
-def test_grayscale_saturation_is_0(c):
-    assert saturation(c, c, c) == 0
-
-
-@given(channel, channel, channel)
-def test_hue_within_0_360_or_nan(r, g, b):
-    h = hue(r, g, b)
-    assert h >= 0 and h < 360 or h is nan
 
 
 @given(channel, channel, channel)

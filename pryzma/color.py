@@ -1,41 +1,8 @@
-from math import nan
-
-
 def pprint(r, g, b):
     switchfg = f"\x1b[38;2;{round(r*255)};{round(g*255)};{round(b*255)}m"
     blocks = "███"
     switchnull = "\x1b[0m"
     print(switchfg + blocks + switchnull, end="")
-
-
-def saturation(r, g, b):
-    maxchannel = max((r, g, b))
-    minchannel = min((r, g, b))
-    luminance = (maxchannel + minchannel) / 2
-    # FIXME
-    if maxchannel + minchannel in (0, 2):
-        return 0
-    if luminance > 0.5:
-        return (maxchannel - minchannel) / (2 - maxchannel - minchannel)
-    return (maxchannel - minchannel) / (maxchannel + minchannel)
-
-
-def hue(r, g, b):
-    def normalize(angle):
-        if angle < 0:
-            return angle + 360
-        return angle
-
-    maxchannel = max((r, g, b))
-    minchannel = min((r, g, b))
-    if maxchannel == minchannel:
-        return nan
-    if r == maxchannel:
-        return normalize((g - b) / (maxchannel - minchannel) * 60)
-    if g == maxchannel:
-        return normalize((2.0 + (b - r) / (maxchannel - minchannel)) * 60)
-    if b == maxchannel:
-        return normalize((4.0 + (r - g) / (maxchannel - minchannel)) * 60)
 
 
 def relative_luminance(r, g, b):
