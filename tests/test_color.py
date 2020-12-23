@@ -2,7 +2,13 @@ from hypothesis import given
 from hypothesis.strategies import floats
 from strategies import rgb
 
-from pryzma.color import contrast, hue_normalize, relative_luminance
+from pryzma.color import contrast, hue_normalize, relative_luminance, to_hex
+
+
+@given(rgb)
+def test_to_hex_within_000000_FFFFFF(rgb):
+    s = to_hex(*rgb)
+    assert s >= "#000000" and s <= "#FFFFFF"
 
 
 @given(floats(min_value=-1e4, max_value=1e4))
