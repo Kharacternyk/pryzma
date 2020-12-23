@@ -1,7 +1,8 @@
-from pryzma.color import hue_normalize, relative_luminance, contrast
 from hypothesis import given
 from hypothesis.strategies import floats
 from strategies import channel, color
+
+from pryzma.color import contrast, hue_normalize, relative_luminance
 
 
 @given(floats(min_value=-1e4, max_value=1e4))
