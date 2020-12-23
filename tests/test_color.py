@@ -1,6 +1,6 @@
 from hypothesis import given
 from hypothesis.strategies import floats
-from strategies import channel, color
+from strategies import rgb
 
 from pryzma.color import contrast, hue_normalize, relative_luminance
 
@@ -11,13 +11,13 @@ def test_normalized_hue_within_0_360(hue):
     assert norm >= 0 and norm < 360
 
 
-@given(channel, channel, channel)
-def test_relative_luminance_within_0_1(r, g, b):
-    rl = relative_luminance(r, g, b)
+@given(rgb)
+def test_relative_luminance_within_0_1(rgb):
+    rl = relative_luminance(*rgb)
     assert rl >= 0 and rl <= 1
 
 
-@given(color, color)
+@given(rgb, rgb)
 def test_contrast_within_1_21(rgb1, rgb2):
     c = contrast(rgb1, rgb2)
     assert c >= 1 and c <= 21
