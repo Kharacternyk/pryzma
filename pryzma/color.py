@@ -23,10 +23,8 @@ def relative_luminance(r, g, b):
     return normalize(r) * 0.2126 + normalize(g) * 0.7152 + normalize(b) * 0.0722
 
 
-def contrast(r1, g1, b1, r2, g2, b2):
-    contrast = (relative_luminance(r1, g1, b1) + 0.05) / (
-        relative_luminance(r2, g2, b2) + 0.05
-    )
+def contrast(rgb1, rgb2):
+    contrast = (relative_luminance(*rgb1) + 0.05) / (relative_luminance(*rgb2) + 0.05)
     if contrast < 1:
         return 1 / contrast
     return contrast

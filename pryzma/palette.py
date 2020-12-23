@@ -9,11 +9,11 @@ def generate_palette(
 ):
     yield bg
     yield fg
-    contrast_ratio = contrast(*bg, *fg)
+    contrast_ratio = contrast(bg, fg)
     hues = (hue_normalize(hue * 60 + hue_offset) / 360 for hue in range(6))
     for hue in hues:
         lightness_contrast = (
-            (lightness, contrast(*hls_to_rgb(hue, lightness, saturation), *bg))
+            (lightness, contrast(hls_to_rgb(hue, lightness, saturation), bg))
             for lightness in (x / (sample_rate - 1) for x in range(sample_rate))
         )
         best_lightness, best_contrast = min(
