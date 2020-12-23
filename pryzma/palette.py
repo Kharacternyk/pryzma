@@ -1,16 +1,7 @@
 #!/usr/bin/env python
 
 from colorsys import hls_to_rgb
-from pryzma.color import contrast
-
-
-def _degrees_normalize(x):
-    """Normalize an angle to fit within [0; 360)"""
-    while x >= 360:
-        x -= 360
-    while x < 0:
-        x += 360
-    return x
+from pryzma.color import contrast, hue_normalize
 
 
 def generate_palette(
@@ -19,7 +10,7 @@ def generate_palette(
     yield bg
     yield fg
     contrast_ratio = contrast(*bg, *fg)
-    hues = (_degrees_normalize(hue * 60 + hue_offset) / 360 for hue in range(6))
+    hues = (hue_normalize(hue * 60 + hue_offset) / 360 for hue in range(6))
     for hue in hues:
         lightness_contrast = (
             (lightness, contrast(*hls_to_rgb(hue, lightness, saturation), *bg))

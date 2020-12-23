@@ -5,6 +5,15 @@ def pprint(r, g, b):
     print(switchfg + blocks + switchnull, end="")
 
 
+def hue_normalize(hue):
+    """Normalize an angle to fit within [0; 360)"""
+    while hue >= 360:
+        hue -= 360
+    while hue < 0:
+        hue += 360
+    return hue
+
+
 def relative_luminance(r, g, b):
     def normalize(c):
         if c <= 0.03928:
