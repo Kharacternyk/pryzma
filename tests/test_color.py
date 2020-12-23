@@ -18,6 +18,6 @@ def test_relative_luminance_within_0_1(rgb):
 
 
 @given(rgb, rgb)
-def test_contrast_within_1_21(rgb1, rgb2):
+def test_contrast_within_1of21_21(rgb1, rgb2):
     c = contrast(rgb1, rgb2)
-    assert c >= 1 and c <= 21
+    assert c >= 1 / 21 and c <= 21

@@ -6,6 +6,17 @@ def pprint(r, g, b):
     print(switchfg + blocks + switchnull, end="")
 
 
+def to_hex(r, g, b):
+    """Return the hexadecimal representation of a color"""
+    return f"#{round(r*255):02X}{round(g*255):02X}{round(b*255):02X}"
+
+
+def from_hex(s):
+    """Parse the hexadecimal representation of a color"""
+    # TODO
+    pass
+
+
 def hue_normalize(hue):
     """Normalize an angle to fit within [0; 360)."""
     while hue >= 360:
@@ -35,6 +46,4 @@ def contrast(rgb1, rgb2):
     The algorithm is described in https://www.w3.org/TR/WCAG20/#contrast-ratiodef.
     """
     contrast = (relative_luminance(*rgb1) + 0.05) / (relative_luminance(*rgb2) + 0.05)
-    if contrast < 1:
-        return 1 / contrast
     return contrast
