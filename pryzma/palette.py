@@ -32,12 +32,20 @@ class Palette:
                 lightness_contrast, key=lambda p: abs(p[1] / contrast_ratio - 1)
             )
             self.__colors[color] = hls_to_rgb(hue, best_lightness, saturation)
-        self.__contrast_ratio = contrast_ratio
 
     def show(self):
+        print(f"{'Colors:': <16}", end="")
         for c in self.__colors:
             pprint(*c)
-        print(f"\nContrast ratio: {self.__contrast_ratio:.1f}")
+        print()
+        print(f"{'Contrast ratios:': <20}", end="")
+        for c in self.__colors[1:]:
+            ratio = contrast(self.__colors[0], c)
+            if ratio < 1:
+                print(f"{1/ratio:>4.1f}", end="")
+            else:
+                print(f"{ratio:>4.1f}", end="")
+        print()
 
     def print(self):
         for c in self.__colors:
