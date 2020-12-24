@@ -36,3 +36,35 @@ class Palette:
     def print(self):
         for c in self.__colors:
             print(to_hex(*c))
+
+    def wal(self):
+        print(
+            f"""
+            {{
+                "special": {{
+                    "background": "{to_hex(*self.__colors[0])}",
+                    "foreground": "{to_hex(*self.__colors[7])}",
+                    "cursor":     "{to_hex(*self.__colors[7])}"
+                }},
+
+                "colors": {{
+                    "color0":  "{to_hex(*self.__colors[0])}",
+                    "color1":  "{to_hex(*self.__colors[1])}",
+                    "color2":  "{to_hex(*self.__colors[2])}",
+                    "color3":  "{to_hex(*self.__colors[3])}",
+                    "color4":  "{to_hex(*self.__colors[4])}",
+                    "color5":  "{to_hex(*self.__colors[5])}",
+                    "color6":  "{to_hex(*self.__colors[6])}",
+                    "color7":  "{to_hex(*self.__colors[7])}",
+
+                    "color8":  "{to_hex(*self.__colors[0])}",
+                    "color9":  "{to_hex(*self.__colors[1])}",
+                    "color10": "{to_hex(*self.__colors[2])}",
+                    "color11": "{to_hex(*self.__colors[3])}",
+                    "color12": "{to_hex(*self.__colors[4])}",
+                    "color13": "{to_hex(*self.__colors[5])}",
+                    "color14": "{to_hex(*self.__colors[6])}",
+                    "color15": "{to_hex(*self.__colors[7])}"
+                }}
+            }}"""
+        )
