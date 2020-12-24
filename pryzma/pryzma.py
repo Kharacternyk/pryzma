@@ -30,7 +30,7 @@ class Pryzma:
             fg = from_hex(fg)
             if hues is None:
                 hues = tuple(hue * 60 + hue_offset for hue in range(6))
-                hues = hues[0], hues[2], hues[1], hues[5], hues[3], hues[4]
+                hues = hues[0], hues[2], hues[1], hues[4], hues[5], hues[3]
             hues = (hue_normalize(hue) / 360 for hue in hues)
 
             # Generating the palette.
