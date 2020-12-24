@@ -1,9 +1,9 @@
 repos:
 
-  - repo: https://github.com/PyCQA/isort
+  - repo: https://github.com/asottile/reorder_python_imports
     rev: master
     hooks:
-      - id: isort
+      - id: reorder-python-imports
 
   - repo: https://github.com/psf/black
     rev: master
