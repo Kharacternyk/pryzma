@@ -13,8 +13,8 @@ def to_hex(r, g, b):
 
 def from_hex(s):
     """Parse the hexadecimal representation of a color."""
-    # TODO
-    pass
+    s = s.lstrip("#")
+    return tuple(int(s[i : i + 2], 16) / 255 for i in (0, 2, 4))
 
 
 def hue_normalize(hue):

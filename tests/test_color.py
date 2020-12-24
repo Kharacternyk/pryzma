@@ -2,13 +2,24 @@ from hypothesis import given
 from hypothesis.strategies import floats
 from strategies import rgb
 
-from pryzma.color import contrast, hue_normalize, relative_luminance, to_hex
+from pryzma.color import contrast
+from pryzma.color import from_hex
+from pryzma.color import hue_normalize
+from pryzma.color import relative_luminance
+from pryzma.color import to_hex
 
 
 @given(rgb)
 def test_to_hex_within_000000_FFFFFF(rgb):
     s = to_hex(*rgb)
     assert s >= "#000000" and s <= "#FFFFFF"
+
+
+def test_from_hex():
+    assert from_hex("#FFFFFF") == (1, 1, 1)
+    assert from_hex("ffffff") == (1, 1, 1)
+    assert from_hex("#000000") == (0, 0, 0)
+    assert from_hex("000000") == (0, 0, 0)
 
 
 @given(floats(min_value=-1e4, max_value=1e4))
