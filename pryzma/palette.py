@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 from colorsys import hls_to_rgb
+from typing import Optional
+from typing import Tuple
 
 from typeguard import typechecked
 
@@ -18,14 +20,17 @@ class Palette:
         fg: str = "#484848",
         saturation: float = 1,
         hue_offset: float = 0,
+        hues: Optional[Tuple[float, float, float, float, float, float]] = None,
         sample_rate: int = 256,
     ):
         bg = from_hex(bg)
         fg = from_hex(fg)
         self.__colors = [bg] + [None] * 6 + [fg]
         contrast_ratio = contrast(bg, fg)
-        hues = (hue_normalize(hue * 60 + hue_offset) / 360 for hue in range(6))
-        colors = [1, 3, 2, 6, 4, 5]
+        if hues is None:
+            hues = (hue * 60 + hue_offset for hue in range(6))
+        hues = (hue_normalize(hue) / 360 for hue in hues)
+        colors = (1, 3, 2, 6, 4, 5)
         for hue, color in zip(hues, colors):
             lightness_contrast = (
                 (lightness, contrast(bg, hls_to_rgb(hue, lightness, saturation)))
