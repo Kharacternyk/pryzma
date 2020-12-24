@@ -7,12 +7,12 @@ def pprint(r, g, b):
 
 
 def to_hex(r, g, b):
-    """Return the hexadecimal representation of a color"""
+    """Return the hexadecimal representation of a color."""
     return f"#{round(r*255):02X}{round(g*255):02X}{round(b*255):02X}"
 
 
 def from_hex(s):
-    """Parse the hexadecimal representation of a color"""
+    """Parse the hexadecimal representation of a color."""
     # TODO
     pass
 
