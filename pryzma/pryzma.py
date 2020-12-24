@@ -1,4 +1,5 @@
 from colorsys import hls_to_rgb
+from inspect import cleandoc
 from typing import Optional
 from typing import Tuple
 
@@ -9,7 +10,7 @@ from typeguard import check_argument_types
 from pryzma.color import contrast
 from pryzma.color import from_hex
 from pryzma.color import hue_normalize
-from pryzma.color import pprint
+from pryzma.color import reproduce
 from pryzma.color import to_hex
 
 
@@ -51,25 +52,13 @@ class Pryzma:
             raise FireError(str(e))
 
     def show(self):
-        print(f"{'Colors:': <16}", end="")
-        for c in self.__colors:
-            pprint(*c)
-        print()
-        print(f"{'Contrast ratios:': <20}", end="")
-        for c in self.__colors[1:]:
-            ratio = contrast(self.__colors[0], c)
-            if ratio < 1:
-                print(f"{1/ratio:>4.1f}", end="")
-            else:
-                print(f"{ratio:>4.1f}", end="")
-        print()
+        return "".join(reproduce(*c) for c in self.__colors)
 
     def print(self):
-        for c in self.__colors:
-            print(to_hex(*c))
+        return "\n".join(to_hex(*c) for c in self.__colors)
 
     def wal(self):
-        print(
+        return cleandoc(
             f"""
             {{
                 "special": {{

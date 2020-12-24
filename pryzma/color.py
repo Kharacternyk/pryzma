@@ -1,9 +1,9 @@
-def pprint(r, g, b):
+def reproduce(r, g, b):
     """Reproduce a color via the terminal escape sequences."""
     switchfg = f"\x1b[38;2;{round(r*255)};{round(g*255)};{round(b*255)}m"
     blocks = "████"
     switchnull = "\x1b[0m"
-    print(switchfg + blocks + switchnull, end="")
+    return switchfg + blocks + switchnull
 
 
 def to_hex(r, g, b):
