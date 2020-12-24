@@ -29,7 +29,7 @@ def hue_normalize(hue):
 def relative_luminance(r, g, b):
     """Compute the relative luminance of a color.
 
-    The algorithm is described in https://www.w3.org/TR/WCAG20/#relativeluminancedef.
+    The algorithm is described in https://www.w3.org/TR/WCAG20/#relativeluminancedef
     """
 
     def normalize(c):
@@ -43,7 +43,7 @@ def relative_luminance(r, g, b):
 def contrast(rgb1, rgb2):
     """Compute the contrast ratio of two colors.
 
-    The algorithm is described in https://www.w3.org/TR/WCAG20/#contrast-ratiodef.
+    The algorithm is described in https://www.w3.org/TR/WCAG20/#contrast-ratiodef
     """
     contrast = (relative_luminance(*rgb1) + 0.05) / (relative_luminance(*rgb2) + 0.05)
     return contrast
