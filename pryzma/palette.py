@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 from colorsys import hls_to_rgb
 
+from typeguard import typechecked
+
 from pryzma.color import contrast
 from pryzma.color import from_hex
 from pryzma.color import hue_normalize
@@ -9,13 +11,14 @@ from pryzma.color import to_hex
 
 
 class Palette:
+    @typechecked
     def __init__(
         self,
-        bg="#EEE8D5",
-        fg="#484848",
-        saturation=1,
-        hue_offset=0,
-        sample_rate=256,
+        bg: str = "#EEE8D5",
+        fg: str = "#484848",
+        saturation: float = 1,
+        hue_offset: float = 0,
+        sample_rate: int = 256,
     ):
         bg = from_hex(bg)
         fg = from_hex(fg)
