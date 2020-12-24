@@ -18,6 +18,7 @@ class Pryzma:
         self,
         bg: str = "#EEE8D5",
         fg: str = "#484848",
+        contrast_ratio: Optional[float] = None,
         saturation: float = 1,
         hue_offset: float = 0,
         hues: Optional[Tuple[float, float, float, float, float, float]] = None,
@@ -32,10 +33,11 @@ class Pryzma:
                 hues = tuple(hue * 60 + hue_offset for hue in range(6))
                 hues = hues[0], hues[2], hues[1], hues[4], hues[5], hues[3]
             hues = (hue_normalize(hue) / 360 for hue in hues)
+            if contrast_ratio is None:
+                contrast_ratio = contrast(bg, fg)
 
             # Generating the palette.
             self.__colors = [bg] + [None] * 6 + [fg]
-            contrast_ratio = contrast(bg, fg)
             for hue, color in zip(hues, range(1, 7)):
                 lightness_contrast = (
                     (lightness, contrast(bg, hls_to_rgb(hue, lightness, saturation)))
