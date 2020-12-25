@@ -8,7 +8,13 @@ from strategies import channels
 from strategies import hues
 from strategies import rgbhex
 
+from pryzma.color import from_hex
 from pryzma.pryzma import Pryzma
+
+
+def is_valid_color(hexcolor):
+    color = from_hex(hexcolor)
+    return all(c >= 0 and c <= 1 for c in color)
 
 
 @given(
@@ -20,23 +26,18 @@ from pryzma.pryzma import Pryzma
     one_of(tuples(hues, hues, hues, hues, hues, hues), just(None)),
     integers(min_value=2, max_value=1e3),
 )
-def test_print_has_8_lines(
+def test_colors_have_8_valid_items(
     bg, fg, contrast_ratio, contrast_ratio_sign, saturation, hues, sample_rate
 ):
     if contrast_ratio:
         contrast_ratio *= contrast_ratio_sign
-    assert (
-        len(
-            Pryzma(
-                bg,
-                fg,
-                contrast_ratio,
-                saturation,
-                hues,
-                sample_rate,
-            )
-            .print()
-            .splitlines()
-        )
-        == 8
-    )
+    colors = Pryzma(
+        bg,
+        fg,
+        contrast_ratio,
+        saturation,
+        hues,
+        sample_rate,
+    ).colors
+    assert len(colors) == 8
+    assert all(is_valid_color(color) for color in colors)

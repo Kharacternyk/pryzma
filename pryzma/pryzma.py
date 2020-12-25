@@ -35,7 +35,7 @@ class Pryzma:
                 contrast_ratio = contrast(bg, fg)
 
             # Generating the palette.
-            self.__colors = [bg] + [None] * 6 + [fg]
+            self.colors = [to_hex(*bg)] + [None] * 6 + [to_hex(*fg)]
             for hue, color in zip(hues, range(1, 7)):
                 lightness_contrast = (
                     (lightness, contrast(bg, hls_to_rgb(hue, lightness, saturation)))
@@ -48,44 +48,43 @@ class Pryzma:
                 best_lightness, best_contrast = min(
                     lightness_contrast, key=lambda p: abs(p[1] - contrast_ratio)
                 )
-                self.__colors[color] = hls_to_rgb(hue, best_lightness, saturation)
+                self.colors[color] = to_hex(
+                    *hls_to_rgb(hue, best_lightness, saturation)
+                )
         except Exception as e:
             raise FireError(str(e))
 
     def show(self):
-        return "".join(reproduce(*c) for c in self.__colors)
-
-    def print(self):
-        return "\n".join(to_hex(*c) for c in self.__colors)
+        return "".join(reproduce(*c) for c in self.colors)
 
     def wal(self):
         return cleandoc(
             f"""
             {{
                 "special": {{
-                    "background": "{to_hex(*self.__colors[0])}",
-                    "foreground": "{to_hex(*self.__colors[7])}",
-                    "cursor":     "{to_hex(*self.__colors[7])}"
+                    "background": "{to_hex(*self.colors[0])}",
+                    "foreground": "{to_hex(*self.colors[7])}",
+                    "cursor":     "{to_hex(*self.colors[7])}"
                 }},
 
                 "colors": {{
-                    "color0":  "{to_hex(*self.__colors[0])}",
-                    "color1":  "{to_hex(*self.__colors[1])}",
-                    "color2":  "{to_hex(*self.__colors[2])}",
-                    "color3":  "{to_hex(*self.__colors[3])}",
-                    "color4":  "{to_hex(*self.__colors[4])}",
-                    "color5":  "{to_hex(*self.__colors[5])}",
-                    "color6":  "{to_hex(*self.__colors[6])}",
-                    "color7":  "{to_hex(*self.__colors[7])}",
+                    "color0":  "{to_hex(*self.colors[0])}",
+                    "color1":  "{to_hex(*self.colors[1])}",
+                    "color2":  "{to_hex(*self.colors[2])}",
+                    "color3":  "{to_hex(*self.colors[3])}",
+                    "color4":  "{to_hex(*self.colors[4])}",
+                    "color5":  "{to_hex(*self.colors[5])}",
+                    "color6":  "{to_hex(*self.colors[6])}",
+                    "color7":  "{to_hex(*self.colors[7])}",
 
-                    "color8":  "{to_hex(*self.__colors[0])}",
-                    "color9":  "{to_hex(*self.__colors[1])}",
-                    "color10": "{to_hex(*self.__colors[2])}",
-                    "color11": "{to_hex(*self.__colors[3])}",
-                    "color12": "{to_hex(*self.__colors[4])}",
-                    "color13": "{to_hex(*self.__colors[5])}",
-                    "color14": "{to_hex(*self.__colors[6])}",
-                    "color15": "{to_hex(*self.__colors[7])}"
+                    "color8":  "{to_hex(*self.colors[0])}",
+                    "color9":  "{to_hex(*self.colors[1])}",
+                    "color10": "{to_hex(*self.colors[2])}",
+                    "color11": "{to_hex(*self.colors[3])}",
+                    "color12": "{to_hex(*self.colors[4])}",
+                    "color13": "{to_hex(*self.colors[5])}",
+                    "color14": "{to_hex(*self.colors[6])}",
+                    "color15": "{to_hex(*self.colors[7])}"
                 }}
             }}"""
         )
