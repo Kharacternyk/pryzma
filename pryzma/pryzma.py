@@ -9,7 +9,6 @@ from typeguard import check_argument_types
 
 from pryzma.color import contrast
 from pryzma.color import from_hex
-from pryzma.color import hue_normalize
 from pryzma.color import reproduce
 from pryzma.color import to_hex
 
@@ -21,7 +20,6 @@ class Pryzma:
         fg: str = "#484848",
         contrast_ratio: Optional[float] = None,
         saturation: float = 1,
-        hue_offset: float = 0,
         hues: Optional[Tuple[float, float, float, float, float, float]] = None,
         sample_rate: int = 256,
     ):
@@ -31,9 +29,8 @@ class Pryzma:
             bg = from_hex(bg)
             fg = from_hex(fg)
             if hues is None:
-                hues = tuple(hue * 60 + hue_offset for hue in range(6))
-                hues = hues[0], hues[2], hues[1], hues[4], hues[5], hues[3]
-            hues = (hue_normalize(hue) / 360 for hue in hues)
+                hues = (0, 120, 60, 240, 300, 200)
+            hues = (hue / 360 for hue in hues)
             if contrast_ratio is None:
                 contrast_ratio = contrast(bg, fg)
 

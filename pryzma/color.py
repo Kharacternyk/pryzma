@@ -17,15 +17,6 @@ def from_hex(s):
     return tuple(int(s[i : i + 2], 16) / 255 for i in (0, 2, 4))
 
 
-def hue_normalize(hue):
-    """Normalize an angle to fit within [0; 360)."""
-    while hue >= 360:
-        hue -= 360
-    while hue < 0:
-        hue += 360
-    return hue
-
-
 def relative_luminance(r, g, b):
     """Compute the relative luminance of a color.
 

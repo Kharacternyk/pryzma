@@ -1,10 +1,8 @@
 from hypothesis import given
-from hypothesis.strategies import floats
 from strategies import rgb
 
 from pryzma.color import contrast
 from pryzma.color import from_hex
-from pryzma.color import hue_normalize
 from pryzma.color import relative_luminance
 from pryzma.color import to_hex
 
@@ -20,12 +18,6 @@ def test_from_hex():
     assert from_hex("ffffff") == (1, 1, 1)
     assert from_hex("#000000") == (0, 0, 0)
     assert from_hex("000000") == (0, 0, 0)
-
-
-@given(floats(min_value=-1e4, max_value=1e4))
-def test_normalized_hue_within_0_360(hue):
-    norm = hue_normalize(hue)
-    assert norm >= 0 and norm < 360
 
 
 @given(rgb)
