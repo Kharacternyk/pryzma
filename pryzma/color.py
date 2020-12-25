@@ -43,7 +43,10 @@ def relative_luminance(r, g, b):
 def contrast(rgb1, rgb2):
     """Compute the contrast ratio of two colors.
 
+    If rgb2 is brighter than rgb1, the returned contrast ratio is negative.
     The algorithm is described in https://www.w3.org/TR/WCAG20/#contrast-ratiodef
     """
     contrast = (relative_luminance(*rgb1) + 0.05) / (relative_luminance(*rgb2) + 0.05)
+    if contrast < 1:
+        return -1 / contrast
     return contrast

@@ -44,8 +44,12 @@ class Pryzma:
                     (lightness, contrast(bg, hls_to_rgb(hue, lightness, saturation)))
                     for lightness in (x / (sample_rate - 1) for x in range(sample_rate))
                 )
+                # Filter out values of the opposite sign.
+                lightness_contrast = filter(
+                    lambda p: (p[1] > 0) == (contrast_ratio > 0), lightness_contrast
+                )
                 best_lightness, best_contrast = min(
-                    lightness_contrast, key=lambda p: abs(p[1] / contrast_ratio - 1)
+                    lightness_contrast, key=lambda p: abs(p[1] - contrast_ratio)
                 )
                 self.__colors[color] = hls_to_rgb(hue, best_lightness, saturation)
         except Exception as e:
