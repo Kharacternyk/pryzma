@@ -55,7 +55,7 @@ class Pryzma:
             raise FireError(str(e))
 
     def show(self):
-        return "".join(reproduce(*c) for c in self.colors)
+        return "".join(reproduce(*from_hex(c)) for c in self.colors)
 
     def wal(self):
         return cleandoc(
