@@ -13,15 +13,25 @@ from pryzma.pryzma import Pryzma
     rgbhex,
     rgbhex,
     one_of(floats(min_value=1 / 21, max_value=21), just(None)),
+    one_of(just(1), just(-1)),
     channels,
     channels,
     integers(min_value=2, max_value=1e3),
 )
-def test_print_has_8_lines(bg, fg, contrast_ratio, saturation, hue_offset, sample_rate):
+def test_print_has_8_lines(
+    bg, fg, contrast_ratio, contrast_ratio_sign, saturation, hue_offset, sample_rate
+):
+    if contrast_ratio:
+        contrast_ratio *= contrast_ratio_sign
     assert (
         len(
             Pryzma(
-                bg, fg, contrast_ratio, saturation, hue_offset, sample_rate=sample_rate
+                bg,
+                fg,
+                contrast_ratio,
+                saturation,
+                hue_offset,
+                sample_rate=sample_rate,
             )
             .print()
             .splitlines()
