@@ -62,29 +62,29 @@ class Pryzma:
             f"""
             {{
                 "special": {{
-                    "background": "{to_hex(*self.colors[0])}",
-                    "foreground": "{to_hex(*self.colors[7])}",
-                    "cursor":     "{to_hex(*self.colors[7])}"
+                    "background": "{self.colors[0]}",
+                    "foreground": "{self.colors[7]}",
+                    "cursor":     "{self.colors[7]}"
                 }},
 
                 "colors": {{
-                    "color0":  "{to_hex(*self.colors[0])}",
-                    "color1":  "{to_hex(*self.colors[1])}",
-                    "color2":  "{to_hex(*self.colors[2])}",
-                    "color3":  "{to_hex(*self.colors[3])}",
-                    "color4":  "{to_hex(*self.colors[4])}",
-                    "color5":  "{to_hex(*self.colors[5])}",
-                    "color6":  "{to_hex(*self.colors[6])}",
-                    "color7":  "{to_hex(*self.colors[7])}",
+                    "color0":  "{self.colors[0]}",
+                    "color1":  "{self.colors[1]}",
+                    "color2":  "{self.colors[2]}",
+                    "color3":  "{self.colors[3]}",
+                    "color4":  "{self.colors[4]}",
+                    "color5":  "{self.colors[5]}",
+                    "color6":  "{self.colors[6]}",
+                    "color7":  "{self.colors[7]}",
 
-                    "color8":  "{to_hex(*self.colors[0])}",
-                    "color9":  "{to_hex(*self.colors[1])}",
-                    "color10": "{to_hex(*self.colors[2])}",
-                    "color11": "{to_hex(*self.colors[3])}",
-                    "color12": "{to_hex(*self.colors[4])}",
-                    "color13": "{to_hex(*self.colors[5])}",
-                    "color14": "{to_hex(*self.colors[6])}",
-                    "color15": "{to_hex(*self.colors[7])}"
+                    "color8":  "{self.colors[0]}",
+                    "color9":  "{self.colors[1]}",
+                    "color10": "{self.colors[2]}",
+                    "color11": "{self.colors[3]}",
+                    "color12": "{self.colors[4]}",
+                    "color13": "{self.colors[5]}",
+                    "color14": "{self.colors[6]}",
+                    "color15": "{self.colors[7]}"
                 }}
             }}"""
         )
